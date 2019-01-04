@@ -14,7 +14,7 @@ steps:
 - script: docker login -u $(docker_username) -p $(docker_password) $(docker_url)
   displayName: 'docker login'
 
-- script: docker build -f Dockerfile -t $(latestName) .
+- script: docker build -f ./ubuntu/Dockerfile -t $(latestName) .
   displayName: 'docker build latest'
 
 - script: docker push $(latestName)
