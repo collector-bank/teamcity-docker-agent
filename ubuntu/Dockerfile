@@ -58,12 +58,15 @@ RUN apt-get update && \
 # A better fix for TW-52939 Dockerfile build fails because of aufs
 VOLUME /var/lib/docker
 
-COPY run-docker.sh /services/run-docker.sh
+ARG POWERSHELL_VERSION=6.0.2 
+ARG IMAGE_NAME=microsoft/powershell:ubuntu14.04
 
-# Trigger .NET CLI first run experience by running arbitrary cmd to populate local package cache
-RUN dotnet help
+# Setup the locale
+ENV LANG en_US.UTF-8
+ENV LC_ALL $LANG
+RUN locale-gen $LANG && update-locale
 
-# Install dependencies and clean up 
+# Install dependencies and clean up
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apt-utils \
@@ -72,14 +75,17 @@ RUN apt-get update \
         apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
 
-    
-# Import the public repository GPG keys for Microsoft 
+# Import the public repository GPG keys for Microsoft
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 
-# Register the Microsoft Ubuntu 14.04 repository 
+# Register the Microsoft Ubuntu 14.04 repository
 RUN curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | tee /etc/apt/sources.list.d/microsoft.list
 
-# Install powershell from Microsoft Repo 
+# Install powershell from Microsoft Repo
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    powershell
+	powershell
+
+# Use PowerShell as the default shell
+# Use array to avoid Docker prepending /bin/sh -c
+CMD [ "pwsh" ]
