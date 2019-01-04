@@ -71,8 +71,14 @@ RUN apt-get update \
         curl \
         apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
-# Import the public repository GPG keys for Microsoft RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-# Register the Microsoft Ubuntu 14.04 repository RUN curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | tee /etc/apt/sources.list.d/microsoft.list
+
+    
+# Import the public repository GPG keys for Microsoft 
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+
+# Register the Microsoft Ubuntu 14.04 repository 
+RUN curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | tee /etc/apt/sources.list.d/microsoft.list
+
 # Install powershell from Microsoft Repo 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
