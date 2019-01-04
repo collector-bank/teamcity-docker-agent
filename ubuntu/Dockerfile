@@ -84,7 +84,7 @@ RUN curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | tee /etc
 # Install powershell from Microsoft Repo
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-	powershell
+    powershell
 
 # Use PowerShell as the default shell
 # Use array to avoid Docker prepending /bin/sh -c
